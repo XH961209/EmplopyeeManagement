@@ -16,7 +16,7 @@ https://download.redis.io/releases/redis-6.2.6.tar.gz
 `./src/redis-server ./redis.conf`  
 #### kafka
 kafka下载链接:  
-https://www.apache.org/dyn/closer.cgi?path=/kafka/3.0.0/kafka_2.13-3.0.0.tgz
+https://www.apache.org/dyn/closer.cgi?path=/kafka/3.0.0/kafka_2.13-3.0.0.tgz  
 下载后，运行以下命令解压:  
 `tar -zxvf kafka_2.13-3.0.0.tgz`  
 解压后进入kafka_2.13-3.0.0目录，先运行zookeeper:  
@@ -35,4 +35,4 @@ https://www.apache.org/dyn/closer.cgi?path=/kafka/3.0.0/kafka_2.13-3.0.0.tgz
 #### 通过rest api调用员工管理系统的注册功能，以注册员工
 `curl -i -H "Content-Type: application/json" -X POST -d '{"number":"000000","name":"Bob","department":"Sale"}' http://127.0.0.1:5000/employee/api/register`  
 该api调用会在员工管理系统中注册一个员工，姓名为Bob，工号为000000，部门为Sale  
-在redis根目录下执行`./src/redis-cli`可进入redis交互式命令行，然后执行`hgetall 00000`可以看到刚刚注册的该员工信息
+在redis根目录下执行`./src/redis-cli`可进入redis交互式命令行，然后执行`hgetall 000000`可以看到刚刚注册的该员工信息
