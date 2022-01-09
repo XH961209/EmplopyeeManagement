@@ -36,15 +36,17 @@ def register_request_is_valid(register_request):
 def register():
     if not register_request_is_valid(request):
         abort(400)
+    # TODO:已经注册过的工号不能再使用
 
     # 为新员工随机生成一个10位的初始密码
     passwd = random_passwd(10)
 
-    # 将新员工的信息写入redis的0号数据库
+    # 将新员工的信息写入redis
     number = request.json['number']
     name = request.json['name']
     department = request.json['department']
     key = number
+    # TODO:员工管理系统似乎不需要记录密码？如果记录密码，用户通过用户管理系统修改密码后，员工管理系统存的密码也要修改，又多了一个交互过程，麻烦
     value = {
         "name": name,
         "department": department,
@@ -62,11 +64,12 @@ def register():
         format(number=number, name=name, department=department, password=passwd).encode()
     kafka_producer.send(EMPLOYEE_USER_TOPIC, msg_new_employee).\
         add_callback(on_send_success, result=result).\
-        add_errback(on_send_fail)
+        add_errback(on_send_fail, result=result)
     time.sleep(0.1)
     if result["success"]:
         result["password"] = passwd
         # TODO:将密码以邮件的形式通知用户
+        # TODO:是不是应该在用户管理系统中通知用户更合理？
 
     return jsonify(result)
 
