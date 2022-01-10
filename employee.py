@@ -54,8 +54,8 @@ def register():
     # TODO:员工管理系统似乎不需要记录密码？如果记录密码，用户通过用户管理系统修改密码后，员工管理系统存的密码也要修改，又多了一个交互过程，麻烦
     value = {
         "name": name,
-        "department": department,
-        "password": passwd
+        # "department": department,
+        # "password": passwd
     }
     redis_client.hset(name=key, mapping=value)
 
