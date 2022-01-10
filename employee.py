@@ -10,6 +10,7 @@ from common import MSG_NEW_EMPLOYEE
 from myredis.client import redis_client
 from mykafka.producer import kafka_producer
 from util.password import random_passwd
+from util.email import send_mail
 
 
 app = Flask(__name__)
@@ -41,6 +42,7 @@ def register():
     number = request.json['number']
     name = request.json['name']
     department = request.json['department']
+    email = request.json['email']
 
     # 已经注册过的工号不能再使用
     if redis_client.exists(number):
@@ -51,7 +53,7 @@ def register():
 
     # 将新员工的信息写入redis
     key = number
-    # TODO:员工管理系统似乎不需要记录密码？如果记录密码，用户通过用户管理系统修改密码后，员工管理系统存的密码也要修改，又多了一个交互过程，麻烦
+    # 员工管理系统似乎不需要记录密码？如果记录密码，用户通过用户管理系统修改密码后，员工管理系统存的密码也要修改，又多了一个交互过程，麻烦
     value = {
         "name": name,
         # "department": department,
@@ -73,8 +75,9 @@ def register():
     time.sleep(0.1)
     if result["success"]:
         result["password"] = passwd
-        # TODO:将密码以邮件的形式通知用户
+        # 将密码以邮件的形式通知用户
         # TODO:是不是应该在用户管理系统中通知用户更合理？
+        send_mail(email, '注册成功!\n你的用户ID是:{}，初始密码是{}，请尽快修改密码。'.format(number, passwd))
 
     return jsonify(result)
 

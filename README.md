@@ -33,6 +33,6 @@ https://www.apache.org/dyn/closer.cgi?path=/kafka/3.0.0/kafka_2.13-3.0.0.tgz
 拉下员工管理系统的代码之后，执行以下命令以运行系统:  
 `python employee.py`  
 #### 通过rest api调用员工管理系统的注册功能，以注册员工
-`curl -i -H "Content-Type: application/json" -X POST -d '{"number":"000000","name":"Bob","department":"Sale"}' http://127.0.0.1:5000/employee/api/register`  
-该api调用会在员工管理系统中注册一个员工，姓名为Bob，工号为000000，部门为Sale  
+`curl -i -H "Content-Type: application/json" -X POST -d '{"number":"000000","name":"Bob","department":"Sale","email":"xxx@xxx.com"}' http://127.0.0.1:5000/employee/api/register`  
+该api调用会在员工管理系统中注册一个员工，姓名为Bob，工号为000000，部门为Sale，注册成功后会通过用户输入的电子邮箱发邮件通知给用户
 在redis根目录下执行`./src/redis-cli`可进入redis交互式命令行，然后执行`hgetall 000000`可以看到刚刚注册的该员工信息
