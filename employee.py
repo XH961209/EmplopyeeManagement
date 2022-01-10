@@ -3,6 +3,7 @@ from flask import Flask
 from flask import request
 from flask import abort
 from flask import jsonify
+import redis
 from common import EMPLOYEE_USER_TOPIC
 from common import EMPLOYEE_PROPERTIES
 from common import MSG_NEW_EMPLOYEE
@@ -36,21 +37,25 @@ def register_request_is_valid(register_request):
 def register():
     if not register_request_is_valid(request):
         abort(400)
-    # TODO:已经注册过的工号不能再使用
+    # 读取post请求包含的信息
+    number = request.json['number']
+    name = request.json['name']
+    department = request.json['department']
+
+    # 已经注册过的工号不能再使用
+    if redis_client.exists(number):
+        return "此用户ID:{} 已被注册。\n".format(number)
 
     # 为新员工随机生成一个10位的初始密码
     passwd = random_passwd(10)
 
     # 将新员工的信息写入redis
-    number = request.json['number']
-    name = request.json['name']
-    department = request.json['department']
     key = number
     # TODO:员工管理系统似乎不需要记录密码？如果记录密码，用户通过用户管理系统修改密码后，员工管理系统存的密码也要修改，又多了一个交互过程，麻烦
     value = {
         "name": name,
-        "department": department,
-        "password": passwd
+        # "department": department,
+        # "password": passwd
     }
     redis_client.hset(name=key, mapping=value)
 
