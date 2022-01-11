@@ -76,7 +76,10 @@ def register():
         result["password"] = passwd
         # 将密码以邮件的形式通知用户
         # TODO:是不是应该在用户管理系统中通知用户更合理？
-        send_mail(email, '注册成功!\n你的用户ID是:{}，初始密码是{}，请尽快修改密码。'.format(number, passwd))
+        try:
+            send_mail(email, '注册成功!\n你的用户ID是:{}，初始密码是{}，请尽快修改密码。'.format(number, passwd))
+        except Exception as e:
+            result["mail_result"] = "邮件发送失败:" + str(e)
 
     return jsonify(result)
 
