@@ -1,4 +1,4 @@
 import time
 from kafka import KafkaProducer
 
-kafka_producer = KafkaProducer(bootstrap_servers=["localhost:9092"])
+kafka_producer = KafkaProducer(bootstrap_servers=["kafka_server:9092"])

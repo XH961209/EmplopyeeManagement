@@ -3,7 +3,6 @@ from flask import Flask
 from flask import request
 from flask import abort
 from flask import jsonify
-import redis
 from common import EMPLOYEE_USER_TOPIC
 from common import EMPLOYEE_PROPERTIES
 from common import MSG_NEW_EMPLOYEE
@@ -83,4 +82,4 @@ def register():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0")
