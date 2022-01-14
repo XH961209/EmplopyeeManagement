@@ -9,7 +9,7 @@ from common import MSG_NEW_EMPLOYEE
 from myredis.client import redis_client
 from mykafka.producer import kafka_producer
 from util.password import random_passwd
-from util.email import send_mail
+from util.myemail import send_email
 
 
 app = Flask(__name__)
@@ -74,12 +74,12 @@ def register():
     time.sleep(0.1)
     if result["success"]:
         result["password"] = passwd
-        # 将密码以邮件的形式通知用户
-        # TODO:是不是应该在用户管理系统中通知用户更合理？
         try:
-            send_mail(email, '注册成功!\n你的用户ID是:{}，初始密码是{}，请尽快修改密码。'.format(number, passwd))
+            send_email(email, '[]', 'Register Success!\nYour id is: {}, initial password is {}, '
+                                    'please reset your password as soon as possible'
+                       .format(number, passwd))
         except Exception as e:
-            result["mail_result"] = "邮件发送失败:" + str(e)
+            result["mail_result"] = "Email send failed:" + str(e)
 
     return jsonify(result)
 
